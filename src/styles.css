@@ -1,3 +1,4 @@
+
 /**
 * Body CSS
 */
@@ -26,6 +27,19 @@ button {
 #sidebar {
 	background-color: #2196F3;
 	padding: 15px;
+}
+
+.note {
+	display: flex;
+}
+
+.deletenote {
+	width: 25px;
+	height: auto;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding-top: 2px;
 }
 
 @media (min-width: 768px) {

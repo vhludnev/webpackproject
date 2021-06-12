@@ -11,7 +11,7 @@
   <body>
     <button class="mui-btn mui-btn--fab mui-btn--accent floating-btn" id="modal-btn">All</button>
     <div id="sidebar">
-      <div class="mui--text-white mui--text-display1 mui--align-vertical">Podcast questions
+      <div class="mui--text-white mui--text-display1 mui--align-vertical">My notebook
         <br>
         <small class="author">by Vyacheslav</small>
       </div>
@@ -21,20 +21,20 @@
         <div class="mui-col-sm-10 mui-col-sm-offset-1">
           <br>
           <br>
-          <div class="mui--text-black-54 mui--text-body2">Ask your question here</div>
+          <div class="mui--text-black-54 mui--text-body2">Enter your note here</div>
           <div class="mui-divider"></div>
           <br>
 
           <form class="mui-form" id="form">
             <div class="mui-textfield mui-textfield--float-label">
               <input type="text" id="question-input" required minlength="10" maxlength="256">
-              <label for="question-input">What's Your Question?</label>
+              <label for="question-input">type here...</label>
             </div>
-            <button type="submit" id="submit" disabled class="mui-btn mui-btn--raised mui-btn--primary" >Ask Your Question</button>
+            <button type="submit" id="submit" disabled class="mui-btn mui-btn--raised mui-btn--primary" >Submit Your Note</button>
           </form>
 
           <br>
-          <div class="mui--text-black-54 mui--text-body2">List of your questions:</div>
+          <div class="mui--text-black-54 mui--text-body2">List of all your notes:</div>
           <div class="mui-divider"></div>
           <br>
           <div id="list"></div>        
@@ -42,4 +42,26 @@
       </div>
     </div>
   </body>
+  <script>
+
+    function arrayRemove(array, value) {   
+      return array.filter(elem => { 
+          return elem.id !== value; 
+      });
+    }
+
+    function deleteNote(removeEl) {
+      const arr = JSON.parse(localStorage.getItem('questions') || '[]')
+      const removeElParent = removeEl.parentElement.parentElement
+      const filtered = arrayRemove(arr, removeElParent.id)
+
+      localStorage.setItem('questions', JSON.stringify(filtered))  
+      removeElParent.remove()
+      
+      if (arr.length === 1) {
+        document.getElementById('list').innerHTML = `<div class="mui--text-headline">You don't have any notes yet</div>`
+      }
+    }
+
+  </script>
 </html>

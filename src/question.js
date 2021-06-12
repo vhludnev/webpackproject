@@ -1,6 +1,8 @@
+import img from './icons8-delete.svg'
+
 export class Question {
     static create(question) {
-        return fetch('https://test.com/questions.json', {
+        return fetch('https://podcast-69d8c.firebaseio.com/questions.json', {
             method: 'POST',
             body: JSON.stringify(question),
             headers: {
@@ -12,15 +14,15 @@ export class Question {
             question.id = response.name
             return question
         })
-           .then(addToLocalStorage)
-           .then(Question.renderList)
+        .then(addToLocalStorage)
+        .then(Question.renderList)
     }
 
     static fetch(token) {
         if (!token) {
             return Promise.resolve('<p class="error">You nave no token</p>')
         }
-        return fetch(`https://test.com/questions.json?auth=${token}`)
+        return fetch(`https://podcast-69d8c.firebaseio.com/questions.json?auth=${token}`)
         .then(response => response.json())
         .then(response => {
             if (response && response.error) {
@@ -34,17 +36,12 @@ export class Question {
         })
     }
 
-
-
-
-
-
     static renderList() {
         const questions = getQuestionsFromLocalStorage()
 
         const html = questions.length
             ? questions.map(toCard).join('')
-            : `<div class="mui--text-headline">There're no questions yet</div>`
+            : `<div class="mui--text-headline">You don't have any notes yet</div>`
 
         const list = document.getElementById('list')
 
@@ -71,11 +68,15 @@ function getQuestionsFromLocalStorage() {
 
 function toCard(question) {
     return `
-    <div class="mui--text-black-54">
-        ${new Date(question.date).toLocaleDateString("ru-ru")}
-        ${new Date(question.date).toLocaleTimeString("ru-ru")}
+    <div id=${question.id}>
+        <div class="mui--text-black-54 note">
+            ${new Date(question.date).toLocaleDateString("ru-ru")}
+            ${new Date(question.date).toLocaleTimeString("ru-ru")}
+            <button class="deletenote" onclick="deleteNote(this)">${img}</button>
+        </div>
+        <div>${question.text} </div> 
+        
+        <br>
     </div>
-    <div>${question.text}</div> 
-    <br>
     `
- }
+}

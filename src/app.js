@@ -1,5 +1,5 @@
 import {isValid} from './utils'
-import {Question} from './question'
+import {Question, getQuestionsFromLocalStorage, deleteNote} from './question'
 import {createModal} from './utils'
 import {getAuthForm} from './auth'
 import {authWithEmailAndPassword} from './auth'
@@ -65,6 +65,9 @@ function renderModalAfterAuth(content) {
     if (typeof content === 'string') {
         createModal('Error', content)
     } else {
-        createModal('List of questions', Question.listToHtml(content));
+        createModal('List of notes', Question.listToHtml(content));
     }
 }
+
+
+
