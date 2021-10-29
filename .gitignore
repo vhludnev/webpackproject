@@ -3,6 +3,8 @@
 # Firebase
 .Firebase
 firebase.json
+.gitignore 
+pnpm-lock.yaml
 
 # dependencies
 /node_modules
@@ -17,6 +19,7 @@ firebase.json
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local

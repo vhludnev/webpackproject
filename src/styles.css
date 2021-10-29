@@ -7,6 +7,7 @@ html,
 body {
 	height: 100%;
 	overflow-wrap: break-word;
+	font-family: "Roboto", "Helvetica Neue", Helvetica, Arial;
 }
 
 html,
@@ -19,6 +20,16 @@ button {
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
 }
 
+ol {
+	padding-left: 25px;
+	display: grid;
+  grid-row-gap: 10px;
+}
+
+li {
+	padding-left: .5em;
+	word-break: break-word;
+}
 
 /**
 * Sidebar CSS
@@ -29,11 +40,17 @@ button {
 	padding: 15px;
 }
 
+#sidebar .rights {
+	position: fixed;
+	bottom: 0;
+}
+
+
 .note {
 	display: flex;
 }
 
-.deletenote {
+.removenote {
 	width: 25px;
 	height: auto;
 	background: none;
@@ -42,25 +59,23 @@ button {
 	padding-top: 2px;
 }
 
-@media (min-width: 768px) {
-	#sidebar {
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		width: 180px;
-		height: 100%;
-		padding-top: 30px;
-	}
+.deletenote {
+	width: 25px;
+	height: auto;
+	cursor: pointer;
+	border-radius: 50%;
+	background: transparent;
+	border-color: transparent;
+	padding: 0 5px;
 }
 
+path {
+	fill: tomato !important;
+}
 
-/**
-* Content CSS
-*/
-@media (min-width: 768px) {
-	#content {
-		margin-left: 180px;
-	}
+.deletenote svg {
+	pointer-events: none;
+	vertical-align: middle;
 }
 
 .author {
@@ -75,7 +90,8 @@ button {
 
 .modal {
 	max-width: 600px;
-	max-height: 300px;
+	/* max-height: 300px; */
+	max-height: 80vh;
 	margin: 100px auto; /* m100-auto */
 	overflow-y: auto;
 	background: #fff;
@@ -86,9 +102,40 @@ button {
 }
 
 .modal .modal-content {
+	min-height: 100px;
+	position: relative;
 	padding: 1rem;
+}
+
+.modal .modal-content p{
+	/* text-align: center; */
+	position: absolute;
+	left: 50%;
+	bottom: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .error {
 	color: red;
+}
+
+
+@media (min-width: 768px) {
+	#sidebar {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		width: 180px;
+		height: 100%;
+		padding-top: 30px;
+	}
+	#content {
+		margin-left: 180px;
+	}
+}
+
+@media (max-width: 768px) {
+	ol {
+		padding-left: 20px;
+	}
 }

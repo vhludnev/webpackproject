@@ -1,5 +1,29 @@
+import firebase from 'firebase/compat/app';
+//import 'firebase/compat/auth';
+import 'firebase/compat/database';
+// import 'firebase/compat/storage';
+
+const firebaseConfig = {
+	apiKey: process.env.PODCAST_FIREBASE_API_KEY,
+	/* authDomain: process.env.PODCAST_FIREBASE_AUTH_DOMAIN, */
+	databaseURL: process.env.PODCAST_FIREBASE_DATABASE_URL,
+	/* projectId: process.env.PODCAST_FIREBASE_PROJECT_ID,
+	storageBucket: process.env.PODCAST_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: process.env.PODCAST_FIREBASE_MESSAGING_SENDER_ID,
+	appId: process.env.PODCAST_FIREBASE_APP_ID */
+};
+
+// Initialize Firebase
+//const app = initializeApp(firebaseConfig);
+
+firebase.initializeApp(firebaseConfig);
+
+// const storage = app.storage();
+// const storageRef = firebase.storage().ref();
+// const db = firebase.database();
+
 import {isValid} from './utils'
-import {Question, getQuestionsFromLocalStorage, deleteNote} from './question'
+import {Question/* , getQuestionsFromLocalStorage, deleteNote */} from './question'
 import {createModal} from './utils'
 import {getAuthForm} from './auth'
 import {authWithEmailAndPassword} from './auth'
@@ -9,6 +33,7 @@ const form = document.getElementById('form')
 const modalBtn = document.getElementById('modal-btn')
 const input = form.querySelector('#question-input')
 const submitBtn = form.querySelector('#submit')
+
 
 /* form.onsubmit = SubmitFormHandler() */
 window.addEventListener('load', Question.renderList) /* the list of questions will stay on the page after refresh */
@@ -66,8 +91,28 @@ function renderModalAfterAuth(content) {
         createModal('Error', content)
     } else {
         createModal('List of notes', Question.listToHtml(content));
+				deleteFbNote();
     }
 }
 
-
+function deleteFbNote() {
+	const authNotes = document.querySelectorAll('.deletenote');
+	authNotes.forEach(note => note.addEventListener('click', (e) => {
+		e.stopPropagation()
+		const btnParent = e.target.parentNode.parentNode;
+		let id = btnParent.id;
+		if (id) {
+			let item = firebase.database().ref(`questions/${id}`);
+				item.remove()
+				.then(() => {
+					console.log("Remove succeeded. ", id)
+					btnParent.parentNode.children.length === 1 && btnParent.parentNode.parentNode.insertAdjacentHTML('afterbegin', '<p>No more notes</p>')
+					btnParent.remove()
+				})
+				.catch(error => {
+					console.log("Remove failed: " + error.message)
+				});
+			}
+	}))
+}
 

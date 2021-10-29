@@ -11,7 +11,9 @@ export class Question {
         })
         .then(response => response.json())
         .then(response => {
-            question.id = response.name
+            //question.id = response.name
+						//return question
+						question.id = Math.floor(Math.random() * 100000)
             return question
         })
         .then(addToLocalStorage)
@@ -40,7 +42,7 @@ export class Question {
         const questions = getQuestionsFromLocalStorage()
 
         const html = questions.length
-            ? questions.map(toCard).join('')
+            ? questions.sort((a, b) => b.date.localeCompare(a.date)).map(toCard).join('')
             : `<div class="mui--text-headline">You don't have any notes yet</div>`
 
         const list = document.getElementById('list')
@@ -50,9 +52,12 @@ export class Question {
 
     static listToHtml(questions) {
         return questions.length
-        ? `<ol>${questions.map(q => `<li>${q.text}</li>`).join('')}</ol>`
+        ? `<ol>${questions.map(q => `
+				<div id=${q.id}>
+				<li>${urlify(q.text)}<button class="deletenote">${img}</button></li></div>`).join('')}
+				</ol>`
 //        ? `<ol>${questions.map(q => `<li>${q.text} // ${q.date}</li>`).join('')}</ol>`
-        : '<p>No question yet</p>'
+        : '<p>No notes yet</p>'
     }
 }
 
@@ -66,17 +71,28 @@ function getQuestionsFromLocalStorage() {
     return JSON.parse(localStorage.getItem('questions') || '[]')
 }
 
+//<div id=${question.id}>
 function toCard(question) {
     return `
-    <div id=${question.id}>
-        <div class="mui--text-black-54 note">
-            ${new Date(question.date).toLocaleDateString("ru-ru")}
-            ${new Date(question.date).toLocaleTimeString("ru-ru")}
-            <button class="deletenote" onclick="deleteNote(this)">${img}</button>
-        </div>
-        <div>${question.text} </div> 
-        
-        <br>
-    </div>
-    `
+    <div id=uid${question.id}>
+			<div class="mui--text-black-54 note">
+					${new Date(question.date).toLocaleDateString("ru-ru")}
+					${new Date(question.date).toLocaleTimeString("ru-ru")}
+					<button class="removenote" onclick="removeNote(this)">${img}</button>
+			</div>
+			<div>${urlify(question.text)} </div> 
+			
+			<br>
+		</div>
+	`
+}
+
+function urlify(text) {
+	const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;	// converts the link part of a string to a hyperlink
+	const httpRedex = /(^\w+:|^)\/\//; // removes https & http from a link
+  return text.replace(urlRegex, url => {
+    return '<a href="' + url + '" target="_blank">' + url.replace(httpRedex, '') + '</a>';
+  })
+  // or alternatively
+  // return text.replace(urlRegex, '<a href="$1">$1</a>')
 }
