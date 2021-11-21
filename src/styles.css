@@ -135,6 +135,10 @@ path {
 }
 
 @media (max-width: 768px) {
+	#sidebar .rights {
+		display: none;
+	}
+	
 	ol {
 		padding-left: 20px;
 	}
